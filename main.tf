@@ -19,13 +19,13 @@
 #   kms                 = var.replicate_kms
 # }
 
-locals {
-  sibling_regions = var.deployment != null ? { for region in lookup(var.deployment, "sibling_regions", []) : region.short => region if region.long != var.region.long } : {}
-  write_roles = concat(
-    var.write_roles,
-    [for name, sibling_region in local.sibling_regions : "arn:aws:iam::${var.account_id}:role/${var.role_global_name}-${sibling_region.short}"]
-  )
-}
+#locals {
+  #sibling_regions = var.deployment != null ? { for region in lookup(var.deployment, "sibling_regions", []) : region.short => region if region.long != var.region.long } : {}
+  #write_roles = concat(
+    #var.write_roles,
+    #[for name, sibling_region in local.sibling_regions : "arn:aws:iam::${var.account_id}:role/${var.role_global_name}-${sibling_region.short}"]
+  #)
+#}
 
 module "kms" {
   count               = (var.kms == null && var.sse_algorithm == "aws:kms") ? 1 : 0
